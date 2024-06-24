@@ -1,0 +1,9 @@
+<svg version="1.0" xmlns="http://www.w3.org/2000/svg"
+ width="194.000000pt" height="201.000000pt" viewBox="0 0 194.000000 201.000000"
+ preserveAspectRatio="xMidYMid meet">
+    <g transform="translate(3.000000,0.000000) scale(0.100000,-0.100000)" fill="#000000" stroke="none">
+        <path transform="translate(770, -95)  scale(1,1.1)" fill="#414357" d="m 125 55 c 212 -33 376 -131 446 -266 c 18 -35 19 -64 19 -521 c 0 -422 3 -503 20 -643 c 11 -87 20 -178 20 -202 l 0 -44 l -27 22 c -61 48 -152 93 -213 106 c -43 10 -172 18 -380 24 c -216 6 -336 13 -380 24 c -208 48 -345 131 -396 241 l -24 50 l 0 469 c 0 456 1 471 21 513 c 35 72 129 136 269 181 c 211 69 389 82 625 46 z"/>
+        <path fill="#e3eafb" d="m 1007 -86 c 212 -33 376 -131 446 -266 c 18 -35 19 -64 19 -521 c 0 -422 3 -503 20 -643 c 11 -87 20 -178 20 -202 l 0 -44 l -27 22 c -61 48 -152 93 -213 106 c -43 10 -172 18 -380 24 c -216 6 -336 13 -380 24 c -208 48 -345 131 -396 241 l -24 50 l 0 469 c 0 456 1 471 21 513 c 35 72 129 136 269 181 c 211 69 389 82 625 46 z"/>
+        <text x="42%" y="50%" style="font-weight: 900;" font-size="12em" fill="#414357" font-family="monospace" transform="translate(0.000000,0.000000) scale(10,-10)" dominant-baseline="middle" text-anchor="middle">U</text>
+    </g>
+</svg>
