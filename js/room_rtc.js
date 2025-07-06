@@ -30,6 +30,7 @@ let localScreanTracks
 let sharingScrean = false
 const USER_ATTRIBUTES = { name: displayName, deviceType: divice,mic:"mute" };
 let joinRoomInit = async () => {
+    setBtnsDisabled(true);
     rtmClient = await AgoraRTM.createInstance(APP_ID)
     await rtmClient.login({ uid: UID, token })
     await rtmClient.addOrUpdateLocalUserAttributes(USER_ATTRIBUTES)
@@ -44,11 +45,20 @@ let joinRoomInit = async () => {
     await client.join(APP_ID, roomID, token, UID)
     client.on('user-published', handleUserPublished)
     client.on('user-left', handleUserleaving)
+    setBtnsDisabled(false);
 }
-
+let setBtnsDisabled = (disabled) => {
+    debugger
+    document.getElementById('join-btn').disabled = disabled;
+    document.getElementById('leave-btn').disabled = disabled;
+    document.getElementById('screan-btn').disabled = disabled;
+    document.getElementById('mic-btn').disabled = disabled;
+    document.getElementById('cam-btn').disabled = disabled;
+}
 let joinstream = async (e) => {
+    setBtnsDisabled(true);
     document.getElementById('join-btn').style.display = 'none'
-    document.getElementById('streamactions').style.display = 'flex'
+    
     localTracks = await AgoraRTC.createMicrophoneAndCameraTracks({}, {
         encoderConfig: {
             width: { min: 640, ideal: 1280, max: 1920 },
@@ -75,6 +85,8 @@ let joinstream = async (e) => {
     document.getElementById(`user-container-${UID}`).addEventListener('click', expandvideoFrame)
     document.getElementById(`user-container-${UID}`).addEventListener("dblclick", fullscreenvideoFrame)
     await client.publish([localTracks[0]])
+    document.getElementById('streamactions').style.display = 'flex'
+    setBtnsDisabled(false);
 }
 var handlingUserPublished = [];
 let handleUserPublished = async (user, mediaType) => {
@@ -141,6 +153,7 @@ let handleUserleaving = async (user) => {
 }
 let amIpublishcam = false
 let togglecamera = async (e) => {
+    setBtnsDisabled(true);
     let btn = document.getElementById('cam-btn')
     if (!amIpublishcam) {
         await client.publish([localTracks[1]])
@@ -175,8 +188,10 @@ let togglecamera = async (e) => {
         await localTracks[1].setMuted(true)
         btn.classList.remove('active')
     }
+    setBtnsDisabled(false);
 }
 let toggleMic = async (e) => {
+    setBtnsdisabled(true);
     let btn = document.getElementById('mic-btn')
     if (localTracks[0].muted) {
         await localTracks[0].setMuted(false)
@@ -193,8 +208,10 @@ let toggleMic = async (e) => {
         USER_ATTRIBUTES.mic="mute"
         await rtmClient.addOrUpdateLocalUserAttributes(USER_ATTRIBUTES)
     }
+    setBtnsdisabled(false);
 }
 let toggleScrean = async (e) => {
+    setBtnsdisabled(true);
     let Screanbtn = document.getElementById('screan-btn')
     let cambtn = document.getElementById('cam-btn')
     if (!sharingScrean) {
@@ -265,8 +282,10 @@ let toggleScrean = async (e) => {
         document.getElementById(`user-container-${UID}`).addEventListener('click', expandvideoFrame)
         document.getElementById(`user-container-${UID}`).addEventListener("dblclick", fullscreenvideoFrame);
     }
+    setBtnsdisabled(false);
 }
 let leaveStream = async (e) => {
+    setBtnsdisabled(true);
     document.getElementById('join-btn').style.display = 'block'
     document.getElementById('streamactions').style.display = 'none'
     amIpublishcam = false;
@@ -290,6 +309,7 @@ let leaveStream = async (e) => {
         videosFrames.classList.remove('min')
     }
     channel.sendMessage({ text: JSON.stringify({ 'type': 'user_left', 'uid': UID }) })
+    setBtnsdisabled(false);
 }
 document.getElementById('cam-btn').addEventListener('click', togglecamera)
 document.getElementById('mic-btn').addEventListener('click', toggleMic)
