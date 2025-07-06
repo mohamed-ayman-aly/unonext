@@ -28,7 +28,7 @@ let localTracks = []
 let remoteUsers = {}
 let localScreanTracks
 let sharingScrean = false
-const USER_ATTRIBUTES = { name: displayName, deviceType: divice,mic:"mute" };
+const USER_ATTRIBUTES = { name: displayName, deviceType: divice, mic: "mute" };
 let joinRoomInit = async () => {
     setBtnsDisabled(true);
     rtmClient = await AgoraRTM.createInstance(APP_ID)
@@ -48,7 +48,6 @@ let joinRoomInit = async () => {
     setBtnsDisabled(false);
 }
 let setBtnsDisabled = (disabled) => {
-    debugger
     document.getElementById('join-btn').disabled = disabled;
     document.getElementById('leave-btn').disabled = disabled;
     document.getElementById('screan-btn').disabled = disabled;
@@ -58,7 +57,7 @@ let setBtnsDisabled = (disabled) => {
 let joinstream = async (e) => {
     setBtnsDisabled(true);
     document.getElementById('join-btn').style.display = 'none'
-    
+
     localTracks = await AgoraRTC.createMicrophoneAndCameraTracks({}, {
         encoderConfig: {
             width: { min: 640, ideal: 1280, max: 1920 },
@@ -77,11 +76,11 @@ let joinstream = async (e) => {
                         <div class="audio-player" id="user-audio-${UID}"><img src="./images/icons/mic.svg" alt="Site Logo"></div>
                     </div>`
     }
-    USER_ATTRIBUTES.mic="mic"
+    USER_ATTRIBUTES.mic = "mic"
     await rtmClient.addOrUpdateLocalUserAttributes(USER_ATTRIBUTES)
     videosFrames.insertAdjacentHTML("beforeend", player)
-    var name=await getMemberName(UID);
-    document.getElementById(`user-audio-${UID}`).innerHTML+=name;
+    var name = await getMemberName(UID);
+    document.getElementById(`user-audio-${UID}`).innerHTML += name;
     document.getElementById(`user-container-${UID}`).addEventListener('click', expandvideoFrame)
     document.getElementById(`user-container-${UID}`).addEventListener("dblclick", fullscreenvideoFrame)
     await client.publish([localTracks[0]])
@@ -105,11 +104,11 @@ let handleUserPublished = async (user, mediaType) => {
     let player = document.getElementById(`user-container-${user.uid}`)
     if (player === null) {
         let remoteUserdivice = await getMemberdivice(user.uid)
-        let remoteUsermic=await getMembermic(user.uid);
-        debugger
-        var img=`<img src="./images/icons/mic.svg">`
-        if(remoteUsermic=="mute"){
-            img=`<img src="./images/icons/micmute.svg">`
+        let remoteUsermic = await getMembermic(user.uid);
+        
+        var img = `<img src="./images/icons/mic.svg">`
+        if (remoteUsermic == "mute") {
+            img = `<img src="./images/icons/micmute.svg">`
         }
 
         if (remoteUserdivice == 'phone') {
@@ -124,8 +123,8 @@ let handleUserPublished = async (user, mediaType) => {
                         </div>`
         }
         videosFrames.insertAdjacentHTML("beforeend", player)
-        var name=await getMemberName(user.uid);
-        document.getElementById(`user-audio-${user.uid}`).innerHTML+=name;
+        var name = await getMemberName(user.uid);
+        document.getElementById(`user-audio-${user.uid}`).innerHTML += name;
         document.getElementById(`user-container-${user.uid}`).addEventListener('click', expandvideoFrame)
         document.getElementById(`user-container-${user.uid}`).addEventListener("dblclick", fullscreenvideoFrame);
     }
@@ -136,7 +135,7 @@ let handleUserPublished = async (user, mediaType) => {
     if (mediaType === 'audio') {
         user.audioTrack.play()
     }
-    debugger
+    
     handlingUserPublished.splice(index, 1);
 }
 
@@ -172,13 +171,14 @@ let togglecamera = async (e) => {
                             </div>`
             }
             videosFrames.insertAdjacentHTML("beforeend", player)
-            var name=await getMemberName(UID);
-            document.getElementById(`user-audio-${UID}`).innerHTML+=name;
+            var name = await getMemberName(UID);
+            document.getElementById(`user-audio-${UID}`).innerHTML += name;
             document.getElementById(`user-container-${UID}`).addEventListener('click', expandvideoFrame)
             document.getElementById(`user-container-${UID}`).addEventListener("dblclick", fullscreenvideoFrame);
         }
         await localTracks[1].play(`user-${UID}`)
         btn.classList.add('active')
+        setBtnsDisabled(false);
         return
     }
     if (localTracks[1].muted) {
@@ -191,27 +191,27 @@ let togglecamera = async (e) => {
     setBtnsDisabled(false);
 }
 let toggleMic = async (e) => {
-    setBtnsdisabled(true);
+    setBtnsDisabled(true);
     let btn = document.getElementById('mic-btn')
     if (localTracks[0].muted) {
         await localTracks[0].setMuted(false)
         btn.classList.add('active')
-        document.getElementById(`user-audio-${UID}`).children[0].src="./images/icons/mic.svg"
+        document.getElementById(`user-audio-${UID}`).children[0].src = "./images/icons/mic.svg"
         channel.sendMessage({ text: JSON.stringify({ 'type': 'mic', 'message': "mic", 'uid': UID }) })
-        USER_ATTRIBUTES.mic="mic"
+        USER_ATTRIBUTES.mic = "mic"
         await rtmClient.addOrUpdateLocalUserAttributes(USER_ATTRIBUTES)
     } else {
         await localTracks[0].setMuted(true)
         btn.classList.remove('active')
-        document.getElementById(`user-audio-${UID}`).children[0].src="./images/icons/micmute.svg"
+        document.getElementById(`user-audio-${UID}`).children[0].src = "./images/icons/micmute.svg"
         channel.sendMessage({ text: JSON.stringify({ 'type': 'mic', 'message': "micmute", 'uid': UID }) })
-        USER_ATTRIBUTES.mic="mute"
+        USER_ATTRIBUTES.mic = "mute"
         await rtmClient.addOrUpdateLocalUserAttributes(USER_ATTRIBUTES)
     }
-    setBtnsdisabled(false);
+    setBtnsDisabled(false);
 }
 let toggleScrean = async (e) => {
-    setBtnsdisabled(true);
+    setBtnsDisabled(true);
     let Screanbtn = document.getElementById('screan-btn')
     let cambtn = document.getElementById('cam-btn')
     if (!sharingScrean) {
@@ -224,10 +224,10 @@ let toggleScrean = async (e) => {
             document.getElementById(`user-container-${UID}`).remove()
             displayFrame.style.display = 'block'
             let player;
-            let remoteUsermic=USER_ATTRIBUTES.mic;
-            var img=`<img src="./images/icons/mic.svg">`
-            if(remoteUsermic=="mute"){
-                img=`<img src="./images/icons/micmute.svg">`
+            let remoteUsermic = USER_ATTRIBUTES.mic;
+            var img = `<img src="./images/icons/mic.svg">`
+            if (remoteUsermic == "mute") {
+                img = `<img src="./images/icons/micmute.svg">`
             }
             if (divice == 'phone') {
                 player = `<div class="video__container phone" id="user-container-${UID}">
@@ -241,8 +241,8 @@ let toggleScrean = async (e) => {
                             </div>`
             }
             displayFrame.insertAdjacentHTML('beforeend', player)
-            var name=await getMemberName(UID);
-            document.getElementById(`user-audio-${UID}`).innerHTML+=name;
+            var name = await getMemberName(UID);
+            document.getElementById(`user-audio-${UID}`).innerHTML += name;
             document.getElementById(`user-container-${UID}`).addEventListener('click', expandvideoFrame)
             document.getElementById(`user-container-${UID}`).addEventListener("dblclick", fullscreenvideoFrame);
             userIdIndisplayFrame = `user-container-${UID}`
@@ -260,10 +260,10 @@ let toggleScrean = async (e) => {
         document.getElementById(`user-container-${UID}`).remove()
         await client.unpublish([localScreanTracks])
         let player;
-        let remoteUsermic=USER_ATTRIBUTES.mic;
-        var img=`<img src="./images/icons/mic.svg">`
-        if(remoteUsermic=="mute"){
-            img=`<img src="./images/icons/micmute.svg">`
+        let remoteUsermic = USER_ATTRIBUTES.mic;
+        var img = `<img src="./images/icons/mic.svg">`
+        if (remoteUsermic == "mute") {
+            img = `<img src="./images/icons/micmute.svg">`
         }
         if (divice == 'phone') {
             player = `<div class="video__container phone" id="user-container-${UID}">
@@ -277,15 +277,15 @@ let toggleScrean = async (e) => {
                         </div>`
         }
         videosFrames.insertAdjacentHTML("beforeend", player)
-        var name=await getMemberName(UID);
-        document.getElementById(`user-audio-${UID}`).innerHTML+=name;
+        var name = await getMemberName(UID);
+        document.getElementById(`user-audio-${UID}`).innerHTML += name;
         document.getElementById(`user-container-${UID}`).addEventListener('click', expandvideoFrame)
         document.getElementById(`user-container-${UID}`).addEventListener("dblclick", fullscreenvideoFrame);
     }
-    setBtnsdisabled(false);
+    setBtnsDisabled(false);
 }
 let leaveStream = async (e) => {
-    setBtnsdisabled(true);
+    setBtnsDisabled(true);
     document.getElementById('join-btn').style.display = 'block'
     document.getElementById('streamactions').style.display = 'none'
     amIpublishcam = false;
@@ -309,7 +309,7 @@ let leaveStream = async (e) => {
         videosFrames.classList.remove('min')
     }
     channel.sendMessage({ text: JSON.stringify({ 'type': 'user_left', 'uid': UID }) })
-    setBtnsdisabled(false);
+    setBtnsDisabled(false);
 }
 document.getElementById('cam-btn').addEventListener('click', togglecamera)
 document.getElementById('mic-btn').addEventListener('click', toggleMic)
