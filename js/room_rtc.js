@@ -1,4 +1,4 @@
-const APP_ID = "cbbef10faac34f3493996a868363944d"
+const APP_ID = "c44e3a151c6b467aa9dbcb1a0de5995e"
 
 let UID = sessionStorage.getItem('uid')
 if (!UID) {
@@ -32,7 +32,7 @@ const USER_ATTRIBUTES = { name: displayName, deviceType: divice, mic: "mute" };
 let joinRoomInit = async () => {
     setBtnsDisabled(true);
     rtmClient = await AgoraRTM.createInstance(APP_ID)
-    await rtmClient.login({ uid: UID, token })
+    await rtmClient.login({ uid: UID, token:token })
     await rtmClient.addOrUpdateLocalUserAttributes(USER_ATTRIBUTES)
     channel = await rtmClient.createChannel(roomID)
     await channel.join()
